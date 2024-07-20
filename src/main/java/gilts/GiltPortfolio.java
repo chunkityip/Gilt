@@ -26,8 +26,11 @@ public class GiltPortfolio {
         this(pricingEngine, new ArrayList<>(), balance);
     }
 
-    // buyGilt() method is to buy gilt base on the balance.
-    // if the balance is smaller than balance, throw a CantAffordGiltException()
+    /**
+     * buyGilt() method is to buy gilt base on the balance.
+     * if the balance is smaller than balance, throw a CantAffordGiltException()
+     */
+
     public void buyGilt(Gilt g) throws CantAffordGiltException{
         double price = pricingEngine.getPrice(g);
         // if the balance is smaller the price, the user can't afford to buy Gilt
@@ -39,11 +42,31 @@ public class GiltPortfolio {
         portfolio.add(g);
     }
 
+    /**
+     * sellGilt() is to sell Gilt as remove Gilt from portfolio
+     * and add the price sell from Gilt into user balance
+     */
     public void sellGilt(Gilt g) {
-
+        double price = pricingEngine.getPrice(g);
+        balance += price;
+        portfolio.remove(g);
     }
 
+    /**
+     *  Adding user's coupon value into balance by iteration.
+     *  If it has expired gilts, remove it from the portfolio.
+     */
     public void tick() {
-
+        // Creating ArrayList to store all the expiredGilts, so we can remove all at once later
+        List<Gilt> expiredGilts = new ArrayList<>();
+        for (Gilt g : portfolio) {
+            // Adding the coupon+principal into balance
+            balance += g.tick();
+            // If Gilt is expired, store at ArrayList
+            if (g.expired()) {
+                expiredGilts.add(g);
+            }
+        }
+        portfolio.removeAll(expiredGilts);
     }
 }
