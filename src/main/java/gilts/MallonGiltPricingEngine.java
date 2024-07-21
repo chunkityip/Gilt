@@ -2,11 +2,12 @@ package gilts;
 
 public class MallonGiltPricingEngine implements GiltPricingEngine {
     private double twoYear, fiveYear, tenYear, twentyYear;
+    // We need to convert the percentage to decimal
     public MallonGiltPricingEngine(double twoYear, double fiveYear, double tenYear, double twentyYear) {
-        this.twoYear = twoYear / 100;
-        this.fiveYear = fiveYear / 100;
-        this.tenYear = tenYear / 100;
-        this.twentyYear = twentyYear / 100;
+        this.twoYear = twoYear;
+        this.fiveYear = fiveYear;
+        this.tenYear = tenYear;
+        this.twentyYear = twentyYear;
     }
     @Override
     public double getPrice(Gilt g) {
@@ -26,10 +27,8 @@ public class MallonGiltPricingEngine implements GiltPricingEngine {
      */
 
     private double calculatePriceHelper(double coupon, double principal, int yearsRemaining, double yield) {
-        return ((2 * yearsRemaining * coupon) -
-                (yearsRemaining * principal * yield) +
-                (2 * principal)) /
-                ((yearsRemaining * yield) + 2);
+        yield = yield / 100; // Convert yield from percentage to decimal
+        return ((2 * yearsRemaining * coupon) - (yearsRemaining * principal * yield) + (2 * principal)) / ((yearsRemaining * yield) + 2);
     }
 
     // getYield() is a method to determine Yield base on the YearsRemaining
